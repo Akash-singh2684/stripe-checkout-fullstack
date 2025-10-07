@@ -5,24 +5,32 @@ A small React + Express/Mongo demo app (shopping/cart + Stripe checkout). This R
 ## Prerequisites
 - Node.js (v16+ / recommended v18+)
 - npm (comes with Node)
-- A MongoDB connection (Atlas or local) if you want persistence
+# Shopping Demo (client + server)
 
-## Project layout
-- `client/` — React app (frontend)
-- `server/` — Express API with Stripe & MongoDB (backend)
+This repository contains a small demo e-commerce app (React frontend + Express backend) that demonstrates a shopping flow with a cart and Stripe checkout integration.
 
-## Environment variables
+This README covers the minimal steps to install, configure environment variables, run the app locally on Windows (PowerShell), and quickly verify the main flows.
 
-Server `.env` (create `server/.env` or set in your host):
+## Quick summary
+- Frontend: `client/` (React)
+- Backend: `server/` (Express + Stripe + MongoDB)
 
-- MONGO_URI — MongoDB connection string
-- STRIPE_PUBLISHABLE_KEY — Stripe publishable key (client use)
-- STRIPE_SECRET_KEY — Stripe secret key (server use)
-- STRIPE_WEBHOOK_SECRET — (optional) Stripe webhook signing secret
-- CLIENT_URL — URL of your frontend (e.g. `http://localhost:3000`)
-- PORT — optional server port (defaults to 5000)
+## Prerequisites
+- Node.js (v16+ recommended)
+- npm (bundled with Node)
+- MongoDB connection (Atlas or local) — required only if you want persistent orders
 
-Example `server/.env`:
+## Required environment variables (server)
+Create a file named `server/.env` with these variables:
+
+- MONGO_URI (MongoDB connection string)
+- STRIPE_PUBLISHABLE_KEY (optional for client-side, keep in `client/.env` if used)
+- STRIPE_SECRET_KEY (server-side)
+- STRIPE_WEBHOOK_SECRET (optional, needed for webhook signature verification)
+- CLIENT_URL (e.g. `http://localhost:3000`)
+- PORT (optional, default 5000)
+
+Example `server/.env` (do NOT commit this file):
 
 ```
 PORT=5000
@@ -33,19 +41,16 @@ STRIPE_WEBHOOK_SECRET=whsec_xxx
 CLIENT_URL=http://localhost:3000
 ```
 
-Client (optional) `.env` for create-react-app (if you want to expose publishable key):
+If you need the publishable key exposed to the React app, create `client/.env` with:
 
-`client/.env`
 ```
 REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_xxx
 ```
 
-> Important: Do NOT commit these `.env` files. The `server/.gitignore` already includes `.env`.
-
 ## Install dependencies
 Open PowerShell and run:
 
-```
+```powershell
 cd 'C:\Users\Megnet Brains\Desktop\task1\client'
 npm install
 
@@ -53,100 +58,59 @@ cd '..\server'
 npm install
 ```
 
-## Run the app (development)
-Run server and client in separate terminals.
+## Run (development)
+Start server and client in separate terminals.
 
-Terminal 1 — start server:
-```
+Server (Terminal 1):
+
+```powershell
 cd 'C:\Users\Megnet Brains\Desktop\task1\server'
 npm run dev
 ```
 
-Terminal 2 — start client:
-```
+Client (Terminal 2):
+
+```powershell
 cd 'C:\Users\Megnet Brains\Desktop\task1\client'
 npm start
 ```
 
-The React app should open at `http://localhost:3000` and the server API runs on `http://localhost:5000` (unless you changed `PORT`).
+By default the client runs on `http://localhost:3000` and the server on `http://localhost:5000`.
 
-## Routes / Quick checks
+## Quick verification
 - Homepage: `/` — product listing with sidebar cart
-- Cart page: `/cart`
+- Cart page: `/cart` — full cart view
 - Category pages: `/category/tshirts`, `/category/pants`, `/category/shoes`, `/category/hats`
 
 To verify cart persistence:
-1. Add an item from the Product List (sidebar should update).
-2. Click "Go to Cart" in the sidebar — it uses client-side navigation and should preserve cart contents.
-
-## Stripe webhooks (optional)
-- If you use Stripe webhooks, set `STRIPE_WEBHOOK_SECRET` in server `.env`. The server registers the webhook at `/api/webhook` and verifies the signature.
+1. Add an item from the Product List. The sidebar cart should update immediately.
+2. Click the sidebar "Go to Cart" button — it uses client-side navigation and should preserve cart contents.
 
 ## Troubleshooting
-- If images don't appear, check your network (images use picsum/unsplash seeds). For guaranteed offline images, drop assets into `client/public/images/` and update `client/src/mockData.js` to point to `/images/your-image.jpg`.
-- If the server fails to connect to MongoDB, confirm `MONGO_URI` is correct and that your IP is allowed in Atlas.
-- If pages reload and cart empties, ensure navigation is client-side (Links) and not `window.location.href` — the app uses client routing and the sidebar `Go to Cart` button uses `navigate('/cart')`.
+- Images missing: images use online sources (picsum/unsplash). For guaranteed availability, add images to `client/public/images/` and update `client/src/mockData.js` to use local paths.
+- MongoDB connection errors: double-check `MONGO_URI` and allow your IP in Atlas.
+- Cart empties on navigation: ensure navigation is client-side (uses `react-router-dom` `navigate`) and not `window.location.href`.
 
-## Development tips
-- The server uses `nodemon` (`npm run dev`) for auto-reload.
-- The client is a standard CRA app — edit `src/` files and the page will hot-reload.
+## Optional: Stripe webhook testing (local)
+You can test webhooks locally with the Stripe CLI:
 
-If you'd like, I can also:
-- Add local placeholder images in `client/public/images/` and wire the mock data to them.
-- Run the dev servers here and paste console logs so you can see any errors.
-
-Enjoy — tell me if you want the README extended with deployment notes or if you want me to start the dev servers for you.
-# 🛒 E-Commerce Checkout with Stripe Integration
-
-A full-stack e-commerce application built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring Stripe payment integration, order management, and webhook handling.
-
-## 📋 Assignment Overview
-
-**Task:** Implement a simple checkout system with Stripe payment integration.
-
-This project demonstrates a complete e-commerce checkout flow where users can browse products, add items to cart, and make payments securely using Stripe's API. The application includes order tracking, payment status management, and webhook integration for real-time payment updates.
-
-## ✨ Features Implemented
-
-### Application Features (Requirements 1-11)
-
-✅ **1. E-Commerce Web Interface**
-- Clean, professional dark theme design
-- Intuitive navigation with cart icon
-- Responsive product grid layout
-
-✅ **2. Mock Product Data**
-- 12 products with real images from Unsplash
-- Product details include name, price, and high-quality images
-- One free sample product for testing
-
-✅ **3. Product Listing with Add to Cart**
-- Grid display of products
-- "Add to Cart" button on each product card
-- Clean card design with product images
-
-✅ **4. Cart Icon with Item Count**
-- Navbar cart icon with badge
-- Real-time count of items in cart
-- Visual feedback on cart updates
-
-✅ **5. Cart View & Checkout Navigation**
-- Clickable cart icon to view selected items
-- Quantity adjustment controls (+/-)
-- Remove items functionality
-- Proceed to checkout button
-
-✅ **6. Checkout Page with Payment Fields**
-- Email input field (required)
-- Stripe-hosted payment form
-- Clean checkout interface
-
-✅ **7. Mandatory Email Validation**
-- Email required before checkout
-- Client-side email format validation
+```powershell
+# Install Stripe CLI and login
 - Error messages for invalid inputs
 
+# Forward events to your local server (example)
 ✅ **8. Stripe Checkout Redirect**
+```
+
+Set `STRIPE_WEBHOOK_SECRET` in `server/.env` with the value provided by the Stripe CLI when listening.
+
+## Want me to run the app here?
+- I can start both servers, capture logs, and report any runtime errors — tell me to proceed and I'll run the dev servers and verify the cart flow.
+
+---
+
+If you'd like additional documentation (deployment, tests, or local images), tell me which part to expand and I'll update the README.
+
 - Seamless redirect to Stripe payment page
 - Secure payment processing
 - Session-based checkout
@@ -639,7 +603,7 @@ This project is created for assignment purposes.
 
 **Akash Singh**
 - GitHub:(https://github.com/Akash-singh2684)
-- Repository: 
+- Repository: (https://github.com/Akash-singh2684/stripe-checkout-fullstack)
 
 ## 🙏 Acknowledgments
 

@@ -29,6 +29,16 @@
       • CLIENT_URL — URL of frontend (e.g. `http://localhost:3000`)
       • PORT — optional (default 5000)
 
+     Codebase (.env file)
+     PORT=5000
+MONGO_URI=(mongodb+srv://akash2604singh_db_user:akash2604singh@cluster0.6jhij42.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0)
+STRIPE_PUBLISHABLE_KEY=(pk_test_51SFTd5HEr9lBb0wpA1eCRZxqMB0HbWvdga2GDPV9iYhNn0gXwTFILtCWoLD7pYr1NUO8VwYYMuMbVw30HywvqrEb00rlfJDVnN)
+STRIPE_SECRET_KEY=(sk_test_51SFTd5HEr9lBb0wpmkYLMeFwApB97FsZMex5QfLarrEcAXhCJ4pqfUP2sqDzwFhZXCRxIXXHtBvEkxJhNOKvWZvF00h7dL3FOf)
+
+CLIENT_URL=(http://localhost:3000)
+
+
+
 • Install dependencies (PowerShell)
 
 ```powershell
